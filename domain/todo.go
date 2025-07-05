@@ -14,4 +14,6 @@ type Todo struct {
 // TodoRepository defines the interface for todo data storage.
 type TodoRepository interface {
 	Create(todo *Todo) (*Todo, error)
+	FindByID(id uint) (*Todo, error)
+	FindAll() ([]*Todo, error)
 }

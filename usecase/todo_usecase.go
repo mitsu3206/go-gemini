@@ -22,3 +22,13 @@ func (uc *TodoUseCase) CreateTodo(title string) (*domain.Todo, error) {
 	}
 	return uc.TodoRepo.Create(todo)
 }
+
+// GetTodoByID retrieves a Todo item by its ID.
+func (uc *TodoUseCase) GetTodoByID(id uint) (*domain.Todo, error) {
+	return uc.TodoRepo.FindByID(id)
+}
+
+// GetAllTodos retrieves all Todo items.
+func (uc *TodoUseCase) GetAllTodos() ([]*domain.Todo, error) {
+	return uc.TodoRepo.FindAll()
+}

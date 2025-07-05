@@ -70,6 +70,8 @@ func main() {
 	})
 
 	r.POST("/todos", todoHandler.CreateTodo)
+	r.GET("/todos/:id", todoHandler.GetTodo)
+	r.GET("/todos", todoHandler.GetAllTodos)
 
 	r.Run(":8080") // listen and serve on 0.0.0.0:8080
 }
