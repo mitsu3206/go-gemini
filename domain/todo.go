@@ -7,8 +7,9 @@ import (
 // Todo represents a single todo item.
 type Todo struct {
 	gorm.Model
-	Title     string    `json:"title"`
-	Completed bool      `json:"completed"`
+	Title     string `json:"title"`
+	Completed bool   `json:"completed"`
+	Tags      []*Tag `json:"tags" gorm:"many2many:todo_tags;"`
 }
 
 // TodoRepository defines the interface for todo data storage.

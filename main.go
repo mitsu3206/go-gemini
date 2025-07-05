@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	gorm "gorm.io/gorm"
 	driver "gorm.io/driver/postgres"
+	gorm "gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
 	"go-gemini/domain"
@@ -24,7 +24,7 @@ func main() {
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),	
+		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PORT"),
 	)
 
@@ -50,17 +50,19 @@ func main() {
 	}
 
 	// AutoMigrate will create/update table based on struct
-	err = db.AutoMigrate(&domain.Todo{})
+	err = db.AutoMigrate(&domain.Todo{}, &domain.Tag{})
 	if err != nil {
 		log.Fatalf("failed to auto migrate: %v", err)
 	}
 
 	r := gin.Default()
 
-	// Dependencies Injection
 	todoRepo := repository.NewGormTodoRepository(db)
-	todoUseCase := usecase.NewTodoUseCase(todoRepo)
+	tagRepo := repository.NewGormTagRepository(db)
+	tagUseCase := usecase.NewTagUseCase(tagRepo)
+	todoUseCase := usecase.NewTodoUseCase(todoRepo, tagUseCase)
 	todoHandler := handler.NewTodoHandler(todoUseCase)
+	tagHandler := handler.NewTagHandler(tagUseCase)
 
 	// Routes
 	r.GET("/", func(c *gin.Context) {
@@ -74,6 +76,13 @@ func main() {
 	r.GET("/todos", todoHandler.GetAllTodos)
 	r.PUT("/todos/:id", todoHandler.UpdateTodo)
 	r.DELETE("/todos/:id", todoHandler.DeleteTodo)
+
+	// Tag Routes
+	r.POST("/tags", tagHandler.CreateTag)
+	r.GET("/tags/:id", tagHandler.GetTag)
+	r.GET("/tags", tagHandler.GetAllTags)
+	r.PUT("/tags/:id", tagHandler.UpdateTag)
+	r.DELETE("/tags/:id", tagHandler.DeleteTag)
 
 	r.Run(":8080") // listen and serve on 0.0.0.0:8080
 }

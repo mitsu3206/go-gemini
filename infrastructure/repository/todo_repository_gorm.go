@@ -28,7 +28,7 @@ func (r *GormTodoRepository) Create(todo *domain.Todo) (*domain.Todo, error) {
 // FindByID retrieves a Todo item by its ID using GORM.
 func (r *GormTodoRepository) FindByID(id uint) (*domain.Todo, error) {
 	var todo domain.Todo
-	result := r.DB.First(&todo, id)
+	result := r.DB.Preload("Tags").First(&todo, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -38,7 +38,7 @@ func (r *GormTodoRepository) FindByID(id uint) (*domain.Todo, error) {
 // FindAll retrieves all Todo items using GORM.
 func (r *GormTodoRepository) FindAll() ([]*domain.Todo, error) {
 	var todos []*domain.Todo
-	result := r.DB.Find(&todos)
+	result := r.DB.Preload("Tags").Find(&todos)
 	if result.Error != nil {
 		return nil, result.Error
 	}

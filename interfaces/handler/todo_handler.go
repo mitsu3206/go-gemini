@@ -22,13 +22,15 @@ func NewTodoHandler(uc *usecase.TodoUseCase) *TodoHandler {
 
 // CreateTodoRequest represents the request body for creating a Todo.
 type CreateTodoRequest struct {
-	Title string `json:"title" binding:"required"`
+	Title string   `json:"title" binding:"required"`
+	Tags  []string `json:"tags"`
 }
 
 // UpdateTodoRequest represents the request body for updating a Todo.
 type UpdateTodoRequest struct {
-	Title     string `json:"title"`
-	Completed bool   `json:"completed"`
+	Title     string   `json:"title"`
+	Completed bool     `json:"completed"`
+	Tags      []string `json:"tags"`
 }
 
 // CreateTodo handles the creation of a new Todo item.
@@ -39,7 +41,7 @@ func (h *TodoHandler) CreateTodo(c *gin.Context) {
 		return
 	}
 
-	todo, err := h.TodoUseCase.CreateTodo(req.Title)
+	todo, err := h.TodoUseCase.CreateTodo(req.Title, req.Tags)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -109,7 +111,7 @@ func (h *TodoHandler) UpdateTodo(c *gin.Context) {
 	existingTodo.Title = req.Title
 	existingTodo.Completed = req.Completed
 
-	updatedTodo, err := h.TodoUseCase.UpdateTodo(existingTodo)
+	updatedTodo, err := h.TodoUseCase.UpdateTodo(existingTodo, req.Tags)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
