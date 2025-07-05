@@ -53,3 +53,12 @@ func (r *GormTodoRepository) Update(todo *domain.Todo) (*domain.Todo, error) {
 	}
 	return todo, nil
 }
+
+// Delete deletes a Todo item by its ID using GORM.
+func (r *GormTodoRepository) Delete(id uint) error {
+	result := r.DB.Delete(&domain.Todo{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

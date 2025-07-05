@@ -117,3 +117,25 @@ func (h *TodoHandler) UpdateTodo(c *gin.Context) {
 
 	c.JSON(http.StatusOK, updatedTodo)
 }
+
+// DeleteTodo handles the deletion of a Todo item by ID.
+func (h *TodoHandler) DeleteTodo(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		return
+	}
+
+	err = h.TodoUseCase.DeleteTodo(uint(id))
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Todo not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		return
+	}
+
+	c.Status(http.StatusNoContent)
+}

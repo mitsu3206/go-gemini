@@ -73,6 +73,7 @@ func main() {
 	r.GET("/todos/:id", todoHandler.GetTodo)
 	r.GET("/todos", todoHandler.GetAllTodos)
 	r.PUT("/todos/:id", todoHandler.UpdateTodo)
+	r.DELETE("/todos/:id", todoHandler.DeleteTodo)
 
 	r.Run(":8080") // listen and serve on 0.0.0.0:8080
 }

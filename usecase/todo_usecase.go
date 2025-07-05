@@ -37,3 +37,8 @@ func (uc *TodoUseCase) GetAllTodos() ([]*domain.Todo, error) {
 func (uc *TodoUseCase) UpdateTodo(todo *domain.Todo) (*domain.Todo, error) {
 	return uc.TodoRepo.Update(todo)
 }
+
+// DeleteTodo deletes a Todo item by its ID.
+func (uc *TodoUseCase) DeleteTodo(id uint) error {
+	return uc.TodoRepo.Delete(id)
+}

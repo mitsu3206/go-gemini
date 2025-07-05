@@ -17,4 +17,5 @@ type TodoRepository interface {
 	FindByID(id uint) (*Todo, error)
 	FindAll() ([]*Todo, error)
 	Update(todo *Todo) (*Todo, error)
+	Delete(id uint) error
 }
