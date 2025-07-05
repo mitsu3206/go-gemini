@@ -32,3 +32,8 @@ func (uc *TodoUseCase) GetTodoByID(id uint) (*domain.Todo, error) {
 func (uc *TodoUseCase) GetAllTodos() ([]*domain.Todo, error) {
 	return uc.TodoRepo.FindAll()
 }
+
+// UpdateTodo updates an existing Todo item.
+func (uc *TodoUseCase) UpdateTodo(todo *domain.Todo) (*domain.Todo, error) {
+	return uc.TodoRepo.Update(todo)
+}

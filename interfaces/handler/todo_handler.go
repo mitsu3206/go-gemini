@@ -25,6 +25,12 @@ type CreateTodoRequest struct {
 	Title string `json:"title" binding:"required"`
 }
 
+// UpdateTodoRequest represents the request body for updating a Todo.
+type UpdateTodoRequest struct {
+	Title     string `json:"title"`
+	Completed bool   `json:"completed"`
+}
+
 // CreateTodo handles the creation of a new Todo item.
 func (h *TodoHandler) CreateTodo(c *gin.Context) {
 	var req CreateTodoRequest
@@ -73,4 +79,41 @@ func (h *TodoHandler) GetAllTodos(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, todos)
+}
+
+// UpdateTodo handles the update of an existing Todo item.
+func (h *TodoHandler) UpdateTodo(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		return
+	}
+
+	var req UpdateTodoRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	existingTodo, err := h.TodoUseCase.GetTodoByID(uint(id))
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Todo not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		return
+	}
+
+	existingTodo.Title = req.Title
+	existingTodo.Completed = req.Completed
+
+	updatedTodo, err := h.TodoUseCase.UpdateTodo(existingTodo)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedTodo)
 }

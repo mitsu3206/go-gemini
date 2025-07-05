@@ -44,3 +44,12 @@ func (r *GormTodoRepository) FindAll() ([]*domain.Todo, error) {
 	}
 	return todos, nil
 }
+
+// Update updates an existing Todo item in the database using GORM.
+func (r *GormTodoRepository) Update(todo *domain.Todo) (*domain.Todo, error) {
+	result := r.DB.Save(todo)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return todo, nil
+}
