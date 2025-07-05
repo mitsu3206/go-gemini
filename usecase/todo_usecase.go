@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"time"
-
 	"go-gemini/domain"
 )
 
@@ -21,7 +19,6 @@ func (uc *TodoUseCase) CreateTodo(title string) (*domain.Todo, error) {
 	todo := &domain.Todo{
 		Title:     title,
 		Completed: false,
-		CreatedAt: time.Now(),
 	}
 	return uc.TodoRepo.Create(todo)
 }

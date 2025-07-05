@@ -1,13 +1,14 @@
 package domain
 
-import "time"
+import (
+	"gorm.io/gorm"
+)
 
 // Todo represents a single todo item.
 type Todo struct {
-	ID        int       `json:"id"`
+	gorm.Model
 	Title     string    `json:"title"`
 	Completed bool      `json:"completed"`
-	CreatedAt time.Time `json:"created_at"`
 }
 
 // TodoRepository defines the interface for todo data storage.
