@@ -62,3 +62,8 @@ func (r *GormTodoRepository) Delete(id uint) error {
 	}
 	return nil
 }
+
+// RemoveTagFromTodo removes a tag from a todo.
+func (r *GormTodoRepository) RemoveTagFromTodo(todoID, tagID uint) error {
+	return r.DB.Where("todo_id = ? AND tag_id = ?", todoID, tagID).Delete(&domain.TodoTag{}).Error
+}

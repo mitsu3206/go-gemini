@@ -6,6 +6,7 @@ import "gorm.io/gorm"
 type Tag struct {
 	gorm.Model
 	Name string `json:"name" gorm:"uniqueIndex"`
+	Todos []*Todo `json:"todos" gorm:"many2many:todo_tags;"`
 }
 
 // TagRepository defines the interface for tag data storage.

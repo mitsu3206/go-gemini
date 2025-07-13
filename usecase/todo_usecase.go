@@ -61,3 +61,8 @@ func (uc *TodoUseCase) UpdateTodo(todo *domain.Todo, tagNames []string) (*domain
 func (uc *TodoUseCase) DeleteTodo(id uint) error {
 	return uc.TodoRepo.Delete(id)
 }
+
+// RemoveTagFromTodo removes a tag from a todo.
+func (uc *TodoUseCase) RemoveTagFromTodo(todoID, tagID uint) error {
+	return uc.TodoRepo.RemoveTagFromTodo(todoID, tagID)
+}

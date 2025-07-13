@@ -141,3 +141,28 @@ func (h *TodoHandler) DeleteTodo(c *gin.Context) {
 
 	c.Status(http.StatusNoContent)
 }
+
+// RemoveTagFromTodo handles the removal of a tag from a todo.
+func (h *TodoHandler) RemoveTagFromTodo(c *gin.Context) {
+	todoIDParam := c.Param("id")
+	todoID, err := strconv.ParseUint(todoIDParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Todo ID format"})
+		return
+	}
+
+	tagIDParam := c.Param("tag_id")
+	tagID, err := strconv.ParseUint(tagIDParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Tag ID format"})
+		return
+	}
+
+	err = h.TodoUseCase.RemoveTagFromTodo(uint(todoID), uint(tagID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Status(http.StatusNoContent)
+}

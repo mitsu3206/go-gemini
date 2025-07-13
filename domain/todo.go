@@ -19,4 +19,5 @@ type TodoRepository interface {
 	FindAll() ([]*Todo, error)
 	Update(todo *Todo) (*Todo, error)
 	Delete(id uint) error
+	RemoveTagFromTodo(todoID, tagID uint) error
 }

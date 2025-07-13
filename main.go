@@ -50,7 +50,7 @@ func main() {
 	}
 
 	// AutoMigrate will create/update table based on struct
-	err = db.AutoMigrate(&domain.Todo{}, &domain.Tag{})
+	err = db.AutoMigrate(&domain.Todo{}, &domain.Tag{}, &domain.TodoTag{})
 	if err != nil {
 		log.Fatalf("failed to auto migrate: %v", err)
 	}
@@ -75,6 +75,7 @@ func main() {
 	r.GET("/todos/:id", todoHandler.GetTodo)
 	r.GET("/todos", todoHandler.GetAllTodos)
 	r.PUT("/todos/:id", todoHandler.UpdateTodo)
+	r.DELETE("/todos/:id/tags/:tag_id", todoHandler.RemoveTagFromTodo)
 	r.DELETE("/todos/:id", todoHandler.DeleteTodo)
 
 	// Tag Routes
