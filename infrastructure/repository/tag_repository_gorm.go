@@ -48,7 +48,7 @@ func (r *GormTagRepository) FindByName(name string) (*domain.Tag, error) {
 // FindAll retrieves all Tag items using GORM.
 func (r *GormTagRepository) FindAll() ([]*domain.Tag, error) {
 	var tags []*domain.Tag
-	result := r.DB.Find(&tags)
+	result := r.DB.Preload("Todos").Find(&tags)
 	if result.Error != nil {
 		return nil, result.Error
 	}
