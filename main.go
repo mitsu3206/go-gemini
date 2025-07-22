@@ -54,6 +54,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to auto migrate: %v", err)
 	}
+	err = db.SetupJoinTable(&domain.Todo{}, "Tags", &domain.TodoTag{})
+	if err != nil {
+		log.Fatalf("failed to setup join table: %v", err)
+	}
 
 	r := gin.Default()
 
